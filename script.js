@@ -12,59 +12,53 @@ let percent = document.getElementById("percent");
 
 function afficherEtape(){
 
-    steps.forEach(step => {
+    steps.forEach(function(step){
         step.classList.remove("active");
     });
 
     steps[current].classList.add("active");
 
-
     let progression = Math.round(((current + 1) / steps.length) * 100);
 
     bar.style.width = progression + "%";
-
     stepText.innerHTML = "Étape " + (current + 1) + " sur 9";
-
     percent.innerHTML = progression + " %";
 
 
-    prev.style.display = current === 0 ? "none" : "block";
+    if(current === 0){
+        prev.style.display = "none";
+    } else {
+        prev.style.display = "block";
+    }
 
 
     if(current === steps.length - 1){
-
-        next.innerHTML="📩 Envoyer mon cahier des charges";
-
-    }else{
-
-        next.innerHTML="Suivant →";
-
+        next.innerHTML = "📩 Envoyer mon cahier des charges";
+    } else {
+        next.innerHTML = "Suivant →";
     }
-
 }
 
 
+next.onclick = function(){
 
-next.onclick=function(){
-
-    if(current < steps.length-1){
+    if(current < steps.length - 1){
 
         current++;
         afficherEtape();
 
-    }else{
+    } else {
 
-        envoyerWhatsApp();
+        alert("Le formulaire est prêt à être envoyé");
 
     }
 
 };
 
 
+prev.onclick = function(){
 
-prev.onclick=function(){
-
-    if(current>0){
+    if(current > 0){
 
         current--;
         afficherEtape();
@@ -72,56 +66,6 @@ prev.onclick=function(){
     }
 
 };
-
-
-
-function envoyerWhatsApp(){
-
-
-let formulaire = document.getElementById("formulaire");
-
-let donnees = new FormData(formulaire);
-
-
-let message =
-"🚀 NOUVEAU CAHIER DES CHARGES E-LEARNING\n\n";
-
-
-donnees.forEach((valeur, nom)=>{
-
-message += "📌 " + nom + " : " + valeur + "\n";
-
-});
-
-
-// Ajouter les informations de la dernière étape
-
-message += "\n👤 Nom : " + document.getElementById("nom").value;
-
-message += "\n📱 Téléphone : " + document.getElementById("telephone").value;
-
-
-message += "\n\n🌐 Questionnaire rempli depuis : ";
-message += window.location.href;
-
-
-
-let numero = "50931106807";
-
-
-let lien =
-"https://wa.me/"
-+ numero
-+ "?text="
-+ encodeURIComponent(message);
-
-
-
-window.location.href = lien;
-
-
-}
-
 
 
 afficherEtape();
